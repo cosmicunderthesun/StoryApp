@@ -39,10 +39,10 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (text.toString().length < 8) {
-                    binding.passwordEditTextLayout.error =
+                    binding.passwordEditText.error =
                         "Password tidak boleh kurang dari 8 karakter"
                 } else {
-                    binding.passwordEditTextLayout.error = null
+                    binding.passwordEditText.error = null
                 }
             }
 
@@ -60,9 +60,9 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!isValidEmail(text.toString())) {
-                    binding.emailEditTextLayout.error = "Format email tidak valid"
+                    binding.emailEditText.error = "Format email tidak valid"
                 } else {
-                    binding.emailEditTextLayout.error = null
+                    binding.emailEditText.error = null
                 }
             }
 

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
 
-        val adapter = StoryAdapter(mutableListOf())
+        val adapter = StoryAdapter(emptyList())
         binding.daftarCerita.adapter = adapter
 
         binding.daftarCerita.layoutManager = LinearLayoutManager(this)
