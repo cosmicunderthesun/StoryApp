@@ -14,9 +14,9 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
-        buildConfigField ("String", "BASE_URL", "\"https://story-api.dicoding.dev/v1/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField ("String", "BASE_URL", "\"https://story-api.dicoding.dev/v1/\"")
+
     }
 
     buildTypes {
@@ -64,9 +64,12 @@ dependencies {
 
     implementation("androidx.paging:paging-runtime-ktx:3.3.5")
 
-    implementation("androidx.arch.core:core-testing:2.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
-    implementation("org.mockito:mockito-inline:4.4.0")
-    implementation("org.mockito:mockito-core:4.4.0")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
+    testImplementation("org.mockito:mockito-inline:4.4.0")
+    testImplementation ("org.mockito:mockito-core:5.4.0")
+    testImplementation ("org.mockito:mockito-junit-jupiter:5.4.0")
+
+    
+
 }

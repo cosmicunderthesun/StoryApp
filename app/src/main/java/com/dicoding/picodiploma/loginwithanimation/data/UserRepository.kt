@@ -91,7 +91,7 @@ class UserRepository private constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
-                enablePlaceholders = false // Optional: Set to true if you want to use placeholders
+                enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 StoryPagingSource(apiService, "Bearer $token")
