@@ -30,26 +30,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val passwordChecked = binding.passwordEditTextLayout.editText
 
-        passwordChecked?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text.toString().length < 8) {
-                    binding.passwordEditText.error =
-                        "Password tidak boleh kurang dari 8 karakter"
-                } else {
-                    binding.passwordEditText.error = null
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
 
         val emailChecked = binding.emailEditTextLayout.editText
 

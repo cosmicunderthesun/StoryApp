@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailBinding
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityUploadBinding
@@ -16,6 +17,7 @@ import com.dicoding.picodiploma.loginwithanimation.utils.Utils
 import com.dicoding.picodiploma.loginwithanimation.utils.Utils.Companion.uriToFile
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
+import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -50,6 +52,22 @@ class UploadActivity : AppCompatActivity() {
             uploadImage()
         }
 
+        viewModel.uploadStatus.observe(this) { success ->
+            if (success) {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            } else {
+                AlertDialog.Builder(this).apply {
+                    setTitle("Oops")
+                    setMessage("Upload story gagal!")
+                    setPositiveButton("Coba Lagi") { _, _ ->}
+                    create()
+                    show()
+                }
+            }
+        }
     }
 
     private fun startGallery() {
@@ -95,7 +113,6 @@ class UploadActivity : AppCompatActivity() {
                 val imageFile = uriToFile(uri, this)
                 Log.d("Image File", "showImage: ${imageFile.path}")
 
-//            showLoading(true)
 
                 val description = binding.editTextDescription.text.toString()
 
@@ -109,10 +126,6 @@ class UploadActivity : AppCompatActivity() {
                 viewModel.uploadStory(user.token.toString(), multipartBody, requestBody)
             }
         }
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-        finish()
     }
 
     private fun setupView() {

@@ -13,7 +13,10 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
-class UploadViewModel(private val repository: UserRepository): ViewModel() {
+class UploadViewModel(private val repository: UserRepository) : ViewModel() {
+
+    private val _uploadStatus = MutableLiveData<Boolean>()
+    val uploadStatus: LiveData<Boolean> get() = _uploadStatus
 
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
@@ -22,9 +25,14 @@ class UploadViewModel(private val repository: UserRepository): ViewModel() {
     fun uploadStory(token: String, imageFile: MultipartBody.Part, desc: RequestBody) {
         viewModelScope.launch {
             try {
-                repository.uploadImage(token, imageFile, desc)
+                val response = repository.uploadImage(token, imageFile, desc)
+                if (response.error == false) {
+                    _uploadStatus.postValue(true)
+                } else {
+                    _uploadStatus.postValue(false)
+                }
             } catch (e: Exception) {
-                UploadResponse(error = true, message = e.message.toString())
+                _uploadStatus.postValue(false)
             }
         }
     }

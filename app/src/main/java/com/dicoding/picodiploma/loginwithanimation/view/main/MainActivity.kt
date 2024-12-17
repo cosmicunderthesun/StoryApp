@@ -14,8 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.data.remote.respone.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.maps.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.upload.UploadActivity
 import com.dicoding.picodiploma.loginwithanimation.view.upload.UploadViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
 
-        val adapter = StoryAdapter(emptyList())
+        val adapter = StoryAdapter()
         binding.daftarCerita.adapter = adapter
 
         binding.daftarCerita.layoutManager = LinearLayoutManager(this)
@@ -44,28 +46,36 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             } else {
-                viewModel.getStory(user.token.toString())
+                viewModel.getPagingStory(user.token.toString())
             }
         }
 
-        viewModel.storyResponse.observe(this) { stories ->
+        viewModel.storyResponse.observe(this) { pagingData ->
             binding.progressBar.visibility = View.VISIBLE
-            if (stories.isNullOrEmpty()) {
-                Log.e("Story Response", "Tidak ada story tersedia")
-                AlertDialog.Builder(this).apply {
-                    setTitle("Oops!")
-                    setMessage("Tidak ada story tersedia")
-                    setPositiveButton("OK") { _, _ -> finish() }
-                    create()
-                    show()
-                }
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.tambahStory.visibility = View.INVISIBLE
-            } else {
-                adapter.updateData(stories)
-                binding.progressBar.visibility = View.INVISIBLE
-            }
+            adapter.submitData(lifecycle, pagingData)
+            binding.progressBar.visibility = View.INVISIBLE
         }
+
+//        viewModel.storyResponse.observe(this) { stories ->
+//            binding.progressBar.visibility = View.VISIBLE
+//            if (stories.isNullOrEmpty()) {
+//                Log.e("Story Response", "Tidak ada story tersedia")
+//                AlertDialog.Builder(this).apply {
+//                    setTitle("Oops!")
+//                    setMessage("Tidak ada story tersedia")
+//                    setPositiveButton("OK") { _, _ -> finish() }
+//                    create()
+//                    show()
+//                }
+//                binding.progressBar.visibility = View.INVISIBLE
+//                binding.tambahStory.visibility = View.INVISIBLE
+//            } else {
+//                adapter.updateData(stories)
+//                binding.progressBar.visibility = View.INVISIBLE
+//            }
+//        }
+
+
 
         binding.tambahStory.setOnClickListener {
             startActivity(Intent(this, UploadActivity::class.java))
@@ -93,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.getSession().observe(this) { user ->
-            viewModel.getStory(user.token.toString())
+            viewModel.getPagingStory(user.token.toString())
         }
     }
 
@@ -114,7 +124,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
-
+            R.id.actionMap -> {
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

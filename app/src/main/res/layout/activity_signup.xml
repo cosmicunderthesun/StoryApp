@@ -99,12 +99,11 @@
         app:startIconDrawable="@drawable/ic_baseline_email_24"
         tools:alpha="100">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.dicoding.picodiploma.loginwithanimation.view.costum.EditTextEmailValidation
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Masukan Email"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -138,12 +137,11 @@
         app:startIconDrawable="@drawable/ic_baseline_lock_24"
         tools:alpha="100">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.dicoding.picodiploma.loginwithanimation.view.costum.EditTextPasswordValidation
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Masukan Password"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
