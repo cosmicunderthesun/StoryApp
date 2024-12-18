@@ -3,7 +3,6 @@ package com.dicoding.picodiploma.loginwithanimation.view.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,15 +10,12 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.R
-import com.dicoding.picodiploma.loginwithanimation.data.remote.respone.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.maps.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.upload.UploadActivity
-import com.dicoding.picodiploma.loginwithanimation.view.upload.UploadViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -56,30 +52,9 @@ class MainActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.INVISIBLE
         }
 
-//        viewModel.storyResponse.observe(this) { stories ->
-//            binding.progressBar.visibility = View.VISIBLE
-//            if (stories.isNullOrEmpty()) {
-//                Log.e("Story Response", "Tidak ada story tersedia")
-//                AlertDialog.Builder(this).apply {
-//                    setTitle("Oops!")
-//                    setMessage("Tidak ada story tersedia")
-//                    setPositiveButton("OK") { _, _ -> finish() }
-//                    create()
-//                    show()
-//                }
-//                binding.progressBar.visibility = View.INVISIBLE
-//                binding.tambahStory.visibility = View.INVISIBLE
-//            } else {
-//                adapter.updateData(stories)
-//                binding.progressBar.visibility = View.INVISIBLE
-//            }
-//        }
-
-
-
         binding.tambahStory.setOnClickListener {
-            startActivity(Intent(this, UploadActivity::class.java))
-            finish()
+            val intent = Intent(this, UploadActivity::class.java)
+            startActivity(intent)
         }
     }
 

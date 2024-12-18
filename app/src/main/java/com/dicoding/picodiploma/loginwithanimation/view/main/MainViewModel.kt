@@ -1,6 +1,5 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,13 +8,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
-import com.dicoding.picodiploma.loginwithanimation.data.remote.respone.GetDetailResponse
-import com.dicoding.picodiploma.loginwithanimation.data.remote.respone.GetStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.respone.ListStoryItem
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _storyResponse = MutableLiveData<PagingData<ListStoryItem>>() // Ubah ke List
+    private val _storyResponse = MutableLiveData<PagingData<ListStoryItem>>()
     val storyResponse: LiveData<PagingData<ListStoryItem>> get() = _storyResponse
 
     fun getSession(): LiveData<UserModel> {

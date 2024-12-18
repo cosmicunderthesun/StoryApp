@@ -10,10 +10,12 @@ import androidx.paging.PagingState
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.dicoding.picodiploma.loginwithanimation.DataDummy
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
+import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.remote.respone.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
@@ -36,16 +38,24 @@ class MainViewModelTest {
     private lateinit var userRepository: UserRepository
 
     @Test
-    fun `when Get Quote Should Not Null and Return Data`() = runTest {
+    fun `when Get Story Should Not Null and Return Data`() = runTest {
+        val userModel =
+            UserModel(email = "test@example.com", token = "some-valid-token", isLogin = true)
+        Mockito.`when`(userRepository.getSession())
+            .thenReturn(flowOf(userModel))
+
         val dummyQuote = DataDummy.generateDummyQuoteResponse()
         val data: PagingData<ListStoryItem> = StoryPagingSource.snapshot(dummyQuote)
         val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
         expectedQuote.postValue(data)
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWFzcVEySlJFc2w0WGIySDgiLCJpYXQiOjE3MzQ0NDE3NTF9.HfcIS9_jkDzAJs7CYUMogN8sC4HQCiip-NIg5EreuGg"
 
-        Mockito.`when`(userRepository.getPagingStory(token)).thenReturn(expectedQuote)
+        Mockito.`when`(userRepository.getPagingStory(userModel.token)).thenReturn(expectedQuote)
 
         val mainViewModel = MainViewModel(userRepository)
+
+        val token = mainViewModel.getSession().getOrAwaitValue().token
+        mainViewModel.getPagingStory(token)
+
         val actualQuote: PagingData<ListStoryItem> = mainViewModel.storyResponse.getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
@@ -54,28 +64,42 @@ class MainViewModelTest {
             workerDispatcher = Dispatchers.Main
         )
         differ.submitData(actualQuote)
+
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dummyQuote.size, differ.snapshot().size)
         Assert.assertEquals(dummyQuote[0], differ.snapshot()[0])
     }
 
     @Test
-    fun `when Get Quote Empty Should Return No Data`() = runTest {
+    fun `when Get Story Empty Should Return No Data`() = runTest {
+        val userModel =
+            UserModel(email = "test@example.com", token = "some-valid-token", isLogin = true)
+        Mockito.`when`(userRepository.getSession()).thenReturn(flowOf(userModel))
+
         val data: PagingData<ListStoryItem> = PagingData.from(emptyList())
         val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()
         expectedStory.value = data
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWFzcVEySlJFc2w0WGIySDgiLCJpYXQiOjE3MzQ0NDE3NTF9.HfcIS9_jkDzAJs7CYUMogN8sC4HQCiip-NIg5EreuGg"
-        Mockito.`when`(userRepository.getPagingStory(token)).thenReturn(expectedStory)
+
+        Mockito.`when`(userRepository.getPagingStory(userModel.token)).thenReturn(expectedStory)
+
         val mainViewModel = MainViewModel(userRepository)
+
+        val token = mainViewModel.getSession().getOrAwaitValue().token
+
+        mainViewModel.getPagingStory(token)
+
         val actualStory: PagingData<ListStoryItem> = mainViewModel.storyResponse.getOrAwaitValue()
+
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
         differ.submitData(actualStory)
+
         Assert.assertEquals(0, differ.snapshot().size)
     }
+
 
     val noopListUpdateCallback = object : ListUpdateCallback {
         override fun onInserted(position: Int, count: Int) {}
