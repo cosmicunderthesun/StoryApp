@@ -2,14 +2,12 @@ package com.dicoding.picodiploma.loginwithanimation.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -30,26 +28,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val passwordChecked = binding.passwordEditTextLayout.editText
 
-        passwordChecked?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text.toString().length < 8) {
-                    binding.passwordEditText.error =
-                        "Password tidak boleh kurang dari 8 karakter"
-                } else {
-                    binding.passwordEditText.error = null
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
 
         val emailChecked = binding.emailEditTextLayout.editText
 
@@ -84,7 +63,6 @@ class LoginActivity : AppCompatActivity() {
     private fun setupView() {
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
