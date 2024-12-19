@@ -75,13 +75,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getSession().observe(this) { user ->
-            viewModel.getPagingStory(user.token.toString())
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.actionMenu -> {
